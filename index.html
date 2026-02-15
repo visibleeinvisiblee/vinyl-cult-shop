@@ -12,74 +12,221 @@
       color: #fff;
       font-family: Arial, Helvetica, sans-serif;
       min-height: 100vh;
-      padding: 2rem;
       overflow-x: hidden;
+    }
+
+    .page-wrap {
+      padding: 1.5rem 2rem 3rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
     h1 {
-      font-size: 2.8rem;
+      font-size: 2.4rem;
       letter-spacing: 0.35em;
       font-weight: 900;
       text-transform: uppercase;
     }
     .subtitle {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       letter-spacing: 0.4em;
       opacity: 0.65;
       margin-top: 0.5rem;
     }
 
-    /* Лампа з регульованою яскравістю */
-    .lamp-section {
-      text-align: center;
-      margin: 2rem 0 3rem;
+    /* Лінійки VinylCult / CyberCult */
+    .line-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
-    .lamp-wrap {
+    .line-nav button {
+      padding: 10px 20px;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+    }
+    .line-nav button:hover {
+      color: rgba(255,255,255,0.9);
+      border-color: rgba(255,255,255,0.4);
+    }
+    .line-nav button.active {
+      color: #fff;
+      border-color: #ff0044;
+      background: rgba(255,0,68,0.15);
+    }
+
+    /* Головне меню — вкладки */
+    .main-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.25rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .main-nav button {
+      padding: 14px 24px;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.35s ease;
+    }
+    .main-nav button:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.25);
+      color: #fff;
+    }
+    .main-nav button.active {
+      background: rgba(255,0,68,0.2);
+      border-color: #ff0044;
+      color: #fff;
+    }
+
+    /* Контент — панелі з плавним переходом */
+    .panels {
       position: relative;
-      display: inline-block;
-      margin-bottom: 1rem;
+      min-height: 420px;
     }
-    .lamp-bulb {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #fff8e0, #ffcc00 40%, #e6a800 70%, #664400);
-      box-shadow:
-        0 0 60px var(--lamp-glow, rgba(255, 220, 100, 0.6)),
-        0 0 100px var(--lamp-glow-outer, rgba(255, 200, 50, 0.25)),
-        inset -10px -10px 25px rgba(0,0,0,0.2);
-      transition: box-shadow 0.2s ease, filter 0.2s ease;
+    .panel {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s;
+      pointer-events: none;
     }
-    .lamp-base {
-      width: 20px;
-      height: 30px;
-      background: linear-gradient(90deg, #333, #555);
-      margin: -5px auto 0;
-      border-radius: 0 0 4px 4px;
+    .panel.active {
+      position: relative;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
     }
-    .sliders {
+
+    /* Лампа — фото + яскравість */
+    .panel-lamp .lamp-photo-wrap {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .panel-lamp .lamp-photo-wrap img {
+      max-width: 100%;
+      width: 320px;
+      border-radius: 12px;
+      display: block;
+      margin: 0 auto;
+      transition: filter 0.35s ease;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+    }
+    .panel-lamp .slider-box {
       max-width: 320px;
-      margin: 0 auto 2rem;
+      margin: 0 auto;
       padding: 1.25rem;
       background: rgba(255,255,255,0.05);
       border-radius: 16px;
     }
-    .slider-row {
-      margin-bottom: 1rem;
-    }
-    .slider-row:last-child { margin-bottom: 0; }
-    .slider-row label {
+    .panel-lamp .slider-box label {
       display: block;
       font-size: 0.75rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      opacity: 0.8;
-      margin-bottom: 0.4rem;
+      opacity: 0.85;
+      margin-bottom: 0.5rem;
     }
+    .lamp-placeholder {
+      display: none;
+      width: 320px;
+      height: 240px;
+      margin: 0 auto;
+      background: #1a1a1a;
+      border-radius: 12px;
+      color: #555;
+      font-size: 0.9rem;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1rem;
+    }
+    .lamp-placeholder.show { display: flex; }
+
+    /* Годинник — циферблат + анімація (стрілка обертається) */
+    .panel-clock .clock-wrap {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .clock-face {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background: url('images/clock.jpg') center/cover no-repeat;
+      background-color: #111;
+      border: 3px solid rgba(255,255,255,0.15);
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 0 30px rgba(0,0,0,0.3);
+    }
+    .clock-face .hand {
+      position: absolute;
+      left: 50%;
+      bottom: 50%;
+      width: 4px;
+      height: 38%;
+      background: #ff0044;
+      border-radius: 2px;
+      transform-origin: 50% 100%;
+      animation: clock-spin linear infinite;
+      box-shadow: 0 0 8px rgba(255,0,68,0.5);
+    }
+    .clock-face .hand.dot {
+      width: 12px;
+      height: 12px;
+      margin-left: -6px;
+      margin-bottom: -6px;
+      border-radius: 50%;
+      background: #ff0044;
+    }
+    @keyframes clock-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .panel-clock .slider-box {
+      max-width: 320px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+    }
+    .panel-clock .slider-box label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Слайдери спільні */
+    .slider-row { margin-bottom: 1rem; }
+    .slider-row:last-child { margin-bottom: 0; }
     input[type="range"] {
       width: 100%;
       height: 8px;
@@ -108,71 +255,63 @@
       border: none;
     }
 
-    /* Товари */
-    .products {
+    /* Сітка товарів (Стелаж / Наліпки) */
+    .products-grid {
       display: grid;
-      gap: 2rem;
-      max-width: 900px;
-      margin: 0 auto 3rem;
-    }
-    .product {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
       gap: 1.5rem;
-      align-items: center;
-      padding: 1.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    }
+    .product-card {
       background: rgba(255,255,255,0.04);
       border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
-    .product-image-wrap {
-      position: relative;
+    .product-card:hover {
+      border-color: rgba(255,0,68,0.3);
+      transform: translateY(-2px);
+    }
+    .product-card .product-image-wrap {
       aspect-ratio: 1;
-      border-radius: 8px;
       overflow: hidden;
       background: #111;
     }
-    .product-image-wrap img {
+    .product-card .product-image-wrap img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
-    .product-info h3 {
-      font-size: 1.1rem;
-      letter-spacing: 0.15em;
+    .product-card .product-info {
+      padding: 1.25rem;
+    }
+    .product-card h3 {
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.4rem;
       font-weight: 700;
     }
-    .product-info .product-desc {
-      font-size: 0.9rem;
+    .product-card .product-desc {
+      font-size: 0.85rem;
       opacity: 0.8;
-      line-height: 1.5;
+      line-height: 1.45;
       margin-bottom: 0.75rem;
     }
-    .product-price {
-      font-size: 1.25rem;
+    .product-card .product-price {
+      font-size: 1.1rem;
       font-weight: bold;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       color: #ff0044;
       margin-bottom: 1rem;
     }
-    .product [contenteditable="true"] {
-      outline: 1px dashed rgba(255,0,68,0.4);
-      outline-offset: 2px;
-      border-radius: 2px;
-    }
-    .product [contenteditable="true"]:focus {
-      outline-color: #ff0044;
-    }
-
     .btn-order {
       display: inline-block;
-      padding: 14px 32px;
-      font-size: 0.9rem;
+      padding: 12px 24px;
+      font-size: 0.8rem;
       font-weight: bold;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
       background: #ff0044;
       color: #fff;
@@ -180,47 +319,30 @@
       border-radius: 50px;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.2s, transform 0.2s;
+      transition: background 0.25s ease, transform 0.25s ease;
     }
     .btn-order:hover {
       background: #ff2266;
       transform: scale(1.03);
     }
-
-    /* Вінілова анімація (швидкість від ползунка) */
-    .vinyl-hero {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 25px rgba(255,0,68,0.12);
-      margin: 0 auto 1.5rem;
-      animation: vinyl-spin linear infinite;
-    }
-    .vinyl-hero::before {
-      content: '';
-      position: absolute;
-      inset: 50%;
-      transform: translate(-50%, -50%);
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: #ff0044;
-      z-index: 1;
-    }
-    .lamp-section .vinyl-hero {
-      position: relative;
+    .product-card [contenteditable="true"] {
+      outline: 1px dashed rgba(255,0,68,0.4);
+      outline-offset: 2px;
     }
 
-    @keyframes vinyl-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      opacity: 0.7;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
     }
 
-    /* Футер — Instagram */
+    /* Футер */
     .footer {
       text-align: center;
-      padding: 2rem 0;
+      padding: 2.5rem 0 1rem;
+      margin-top: 2rem;
       border-top: 1px solid rgba(255,255,255,0.1);
     }
     .footer a {
@@ -228,9 +350,6 @@
       text-decoration: none;
       font-size: 0.9rem;
       letter-spacing: 0.2em;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
       transition: color 0.2s;
     }
     .footer a:hover { color: #ff0044; }
@@ -266,83 +385,106 @@
     body.edit-mode { padding-top: 52px; }
 
     @media (max-width: 600px) {
-      body { padding: 1.25rem; }
-      h1 { font-size: 1.8rem; letter-spacing: 0.2em; }
+      .page-wrap { padding: 1rem; }
+      h1 { font-size: 1.75rem; letter-spacing: 0.2em; }
       .subtitle { font-size: 0.75rem; letter-spacing: 0.2em; }
-      .product {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-      }
-      .product-image-wrap { max-height: 280px; }
-      .sliders { padding: 1rem; }
+      .main-nav button { padding: 12px 16px; font-size: 0.75rem; letter-spacing: 0.12em; }
+      .clock-face { width: 160px; height: 160px; }
+      .clock-face .hand { height: 35%; }
+      .panel-lamp .lamp-photo-wrap img { width: 100%; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Режим редагування: кнопка вмикає contenteditable для тексту та ціни -->
   <div class="edit-mode-bar hidden" id="editBar">
     <span style="font-size:0.75rem; letter-spacing:0.15em; opacity:0.9;">Режим редагування</span>
     <button type="button" id="saveEditBtn" class="primary">Зберегти</button>
     <button type="button" id="exitEditBtn">Вийти</button>
   </div>
 
-  <header class="header">
-    <h1>VINYL CULT</h1>
-    <p class="subtitle">вироби на замовлення</p>
-  </header>
+  <div class="page-wrap">
+    <header class="header">
+      <h1>VINYL CULT</h1>
+      <p class="subtitle">вироби на замовлення</p>
+    </header>
 
-  <section class="lamp-section">
-    <div class="lamp-wrap">
-      <div class="vinyl-hero" id="vinylHero"></div>
-      <div class="lamp-bulb" id="lampBulb"></div>
-      <div class="lamp-base"></div>
-    </div>
-    <div class="sliders">
-      <div class="slider-row">
-        <label for="brightness">Яскравість лампи</label>
-        <input type="range" id="brightness" min="0" max="100" value="70">
-      </div>
-      <div class="slider-row">
-        <label for="animSpeed">Швидкість анімації</label>
-        <input type="range" id="animSpeed" min="20" max="200" value="100">
-      </div>
-    </div>
-  </section>
+    <nav class="line-nav" aria-label="Лінійки">
+      <button type="button" class="line-btn active" data-line="all">Усе</button>
+      <button type="button" class="line-btn" data-line="VinylCult">VinylCult</button>
+      <button type="button" class="line-btn" data-line="CyberCult">CyberCult</button>
+    </nav>
 
-  <section class="products" id="productsContainer"></section>
+    <nav class="main-nav" aria-label="Категорії">
+      <button type="button" class="tab-btn active" data-tab="lamp">Лампи</button>
+      <button type="button" class="tab-btn" data-tab="clock">Годинники</button>
+      <button type="button" class="tab-btn" data-tab="shelf">Стелаж</button>
+      <button type="button" class="tab-btn" data-tab="stickers">Наліпки</button>
+    </nav>
+
+    <div class="panels">
+      <!-- Лампа: фото + яскравість -->
+      <section class="panel panel-lamp active" id="panel-lamp">
+        <div class="lamp-photo-wrap">
+          <img id="lampPhoto" src="images/lamp.jpg" alt="Лампа" onerror="this.style.display='none'; this.nextElementSibling.classList.add('show');">
+          <div class="lamp-placeholder" id="lampPlaceholder">Додай фото лампи:<br>images/lamp.jpg</div>
+        </div>
+        <div class="slider-box">
+          <div class="slider-row">
+            <label for="brightness">Яскравість лампи</label>
+            <input type="range" id="brightness" min="0" max="100" value="75">
+          </div>
+        </div>
+      </section>
+
+      <!-- Годинник: анімація стрілки -->
+      <section class="panel panel-clock" id="panel-clock">
+        <div class="clock-wrap">
+          <div class="clock-face" id="clockFace">
+            <div class="hand" id="clockHand"></div>
+          </div>
+        </div>
+        <div class="slider-box">
+          <div class="slider-row">
+            <label for="animSpeed">Швидкість анімації (годинник)</label>
+            <input type="range" id="animSpeed" min="20" max="200" value="100">
+          </div>
+        </div>
+      </section>
+
+      <!-- Стелаж -->
+      <section class="panel panel-products" id="panel-shelf">
+        <div class="products-grid" id="productsShelf"></div>
+      </section>
+
+      <!-- Наліпки -->
+      <section class="panel panel-products" id="panel-stickers">
+        <div class="products-grid" id="productsStickers"></div>
+      </section>
+    </div>
+  </div>
 
   <footer class="footer">
     <a href="https://www.instagram.com/vinyl_cult?igsh=MXd6aXJ5dWRpMDJvNA%3D%3D&utm_source=qr" target="_blank" rel="noopener">Instagram — @vinyl_cult</a>
   </footer>
 
   <script>
-    // ========== ТУТ РЕДАГУЄШ ТОВАРИ: назва, опис, ціна, шлях до фото ==========
+    // ========== КОНФІГ: категорія (shelf|stickers), лінійка (VinylCult|CyberCult), фото лампи/годинника ==========
     const PRODUCTS_CONFIG = [
-      {
-        title: 'Вінілова наліпка',
-        description: 'Ручна робота, якісний вініл. Розмір та колір на вибір.',
-        price: '150 грн',
-        image: 'images/product1.jpg'
-      },
-      {
-        title: 'Наліпка на ноутбук',
-        description: 'Оригінальний дизайн для твого девайсу.',
-        price: '200 грн',
-        image: 'images/product2.jpg'
-      },
-      {
-        title: 'Комплект наліпок',
-        description: '3–5 штук у наборі. Ідеально для скейта або авто.',
-        price: '400 грн',
-        image: 'images/product3.jpg'
-      }
+      { title: 'Стелаж малий', description: 'Для вінілу та декору.', price: '850 грн', image: 'images/shelf1.jpg', category: 'shelf', line: 'VinylCult' },
+      { title: 'Стелаж великий', description: 'Під колекцію платівок.', price: '1200 грн', image: 'images/shelf2.jpg', category: 'shelf', line: 'VinylCult' },
+      { title: 'Стелаж Cyber', description: 'Мінімалістичний стелаж.', price: '950 грн', image: 'images/shelf3.jpg', category: 'shelf', line: 'CyberCult' },
+      { title: 'Наліпка на ноутбук', description: 'Оригінальний дизайн.', price: '200 грн', image: 'images/product1.jpg', category: 'stickers', line: 'VinylCult' },
+      { title: 'Комплект наліпок', description: '3–5 штук. Скейт, авто.', price: '400 грн', image: 'images/product2.jpg', category: 'stickers', line: 'VinylCult' },
+      { title: 'Наліпка Cyber', description: 'Кібер-стиль для девайсів.', price: '180 грн', image: 'images/product3.jpg', category: 'stickers', line: 'CyberCult' }
     ];
 
-    const INSTAGRAM_URL = 'https://www.instagram.com/vinyl_cult?igsh=MXd6aXJ5dWRpMDJvNA%3D%3D&utm_source=qr';
-    const ORDER_LINK = 'https://www.instagram.com/vinyl_cult'; // Заміни на посилання для замовлення (наприклад Direct)
-
+    const ORDER_LINK = 'https://www.instagram.com/vinyl_cult';
     const STORAGE_KEY = 'vinyl_cult_products';
+
+    // Фото лампи та годинника (можна змінити шляхи тут або в HTML)
+    const LAMP_IMAGE = 'images/lamp.jpg';
+    const CLOCK_IMAGE = 'images/clock.jpg';
 
     function getProducts() {
       try {
@@ -357,109 +499,136 @@
 
     function saveProducts(products) {
       try {
-        const toSave = products.map(p => ({
-          title: p.title,
-          description: p.description,
-          price: p.price,
-          image: p.image
-        }));
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(products.map(p => ({
+          title: p.title, description: p.description, price: p.price, image: p.image, category: p.category, line: p.line
+        })));
       } catch (e) {}
     }
 
-    function renderProducts() {
-      const products = getProducts();
-      const container = document.getElementById('productsContainer');
-      container.innerHTML = products.map((p, i) => `
-        <article class="product" data-index="${i}">
+    let currentLine = 'all';
+    let currentTab = 'lamp';
+
+    function getFilteredProducts(category) {
+      const all = getProducts();
+      let list = all.filter(p => p.category === category);
+      if (currentLine !== 'all') list = list.filter(p => p.line === currentLine);
+      return { list, all };
+    }
+
+    function renderProductCard(p, i) {
+      const placeholder = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23222" width="200" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23666" font-size="14">Фото</text></svg>`;
+      return `
+        <article class="product-card" data-index="${i}" data-category="${p.category}">
           <div class="product-image-wrap">
-            <img src="${p.image}" alt="${p.title}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23222%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2214%22>Фото ${i + 1}</text></svg>'" />
+            <img src="${p.image}" alt="${p.title}" onerror="this.src='${placeholder}'" />
           </div>
           <div class="product-info">
-            <h3 class="product-title" contenteditable="false" data-field="title">${p.title}</h3>
-            <p class="product-desc product-desc-el" contenteditable="false" data-field="description">${p.description}</p>
-            <p class="product-price product-price-el" contenteditable="false" data-field="price">${p.price}</p>
+            <h3 class="product-title" contenteditable="false">${p.title}</h3>
+            <p class="product-desc product-desc-el" contenteditable="false">${p.description}</p>
+            <p class="product-price product-price-el" contenteditable="false">${p.price}</p>
             <a href="${ORDER_LINK}" class="btn-order" target="_blank" rel="noopener">Замовити</a>
           </div>
         </article>
-      `).join('');
+      `;
     }
 
-    function setEditMode(on) {
-      document.body.classList.toggle('edit-mode', on);
-      document.getElementById('editBar').classList.toggle('hidden', !on);
-      const products = getProducts();
-      document.querySelectorAll('.product').forEach((el, i) => {
-        const title = el.querySelector('.product-title');
-        const desc = el.querySelector('.product-desc-el');
-        const price = el.querySelector('.product-price-el');
-        [title, desc, price].forEach(node => {
-          if (!node) return;
-          node.contentEditable = on;
-          if (on) node.setAttribute('data-index', i);
-        });
+    function renderProductGrids() {
+      const { list: shelf, all } = getFilteredProducts('shelf');
+      const { list: stickers } = getFilteredProducts('stickers');
+      const shelfEl = document.getElementById('productsShelf');
+      const stickersEl = document.getElementById('productsStickers');
+      shelfEl.innerHTML = shelf.length
+        ? shelf.map(p => renderProductCard(p, all.indexOf(p))).join('')
+        : '<p class="empty-state">Тут поки немає товарів цієї лінійки. Додай у PRODUCTS_CONFIG (category: shelf).</p>';
+      stickersEl.innerHTML = stickers.length
+        ? stickers.map(p => renderProductCard(p, all.indexOf(p))).join('')
+        : '<p class="empty-state">Тут поки немає товарів цієї лінійки. Додай у PRODUCTS_CONFIG (category: stickers).</p>';
+    }
+
+    function switchTab(tabId) {
+      currentTab = tabId;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+      });
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === 'panel-' + tabId);
       });
     }
 
-    function collectEditedProducts() {
-      const products = getProducts();
-      document.querySelectorAll('.product').forEach(el => {
-        const i = parseInt(el.getAttribute('data-index'), 10);
-        if (isNaN(i) || !products[i]) return;
-        const title = el.querySelector('.product-title');
-        const desc = el.querySelector('.product-desc-el');
-        const price = el.querySelector('.product-price-el');
-        if (title) products[i].title = title.textContent.trim() || products[i].title;
-        if (desc) products[i].description = desc.textContent.trim() || products[i].description;
-        if (price) products[i].price = price.textContent.trim() || products[i].price;
+    function switchLine(lineId) {
+      currentLine = lineId;
+      document.querySelectorAll('.line-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-line') === lineId);
       });
-      return products;
+      renderProductGrids();
     }
 
-    document.getElementById('saveEditBtn').addEventListener('click', () => {
-      const products = collectEditedProducts();
-      saveProducts(products);
-      setEditMode(false);
-      renderProducts();
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
     });
-    document.getElementById('exitEditBtn').addEventListener('click', () => {
-      setEditMode(false);
-      renderProducts();
+    document.querySelectorAll('.line-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchLine(btn.getAttribute('data-line')));
     });
 
-    // Кнопка "Редагувати" — можна додати в футер або під заголовок для власника сайту
-    const editToggle = document.createElement('button');
-    editToggle.textContent = 'Редагувати контент';
-    editToggle.className = 'edit-toggle-btn';
-    editToggle.style.cssText = 'position:fixed;bottom:1rem;right:1rem;padding:10px 16px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(0,0,0,0.8);color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.2);border-radius:8px;cursor:pointer;z-index:999;';
-    editToggle.addEventListener('click', () => setEditMode(!document.body.classList.contains('edit-mode')));
-    document.body.appendChild(editToggle);
-
-    // Ползунок яскравості лампи
-    const lampBulb = document.getElementById('lampBulb');
+    // Яскравість — на фото лампи
+    const lampPhoto = document.getElementById('lampPhoto');
     const brightnessSlider = document.getElementById('brightness');
     function updateLampBrightness(val) {
       const pct = val / 100;
-      const glow = `rgba(255, 220, 100, ${0.2 + 0.6 * pct})`;
-      const outer = `rgba(255, 200, 50, ${0.1 + 0.25 * pct})`;
-      lampBulb.style.setProperty('--lamp-glow', glow);
-      lampBulb.style.setProperty('--lamp-glow-outer', outer);
-      lampBulb.style.filter = `brightness(${0.3 + 0.8 * pct})`;
+      const brightness = 0.25 + 0.95 * pct;
+      if (lampPhoto) lampPhoto.style.filter = `brightness(${brightness})`;
     }
     brightnessSlider.addEventListener('input', () => updateLampBrightness(Number(brightnessSlider.value)));
     updateLampBrightness(Number(brightnessSlider.value));
 
-    // Ползунок швидкості анімації (вініл)
-    const vinylHero = document.getElementById('vinylHero');
+    // Швидкість анімації — на годиннику (стрілка)
+    const clockHand = document.getElementById('clockHand');
     const animSlider = document.getElementById('animSpeed');
-    function updateAnimSpeed(val) {
-      const duration = (200 - val + 20) / 20; // 20 = дуже швидко, 200 = повільно (секунди * 10)
-      vinylHero.style.animationDuration = duration + 's';
+    function updateClockAnim(val) {
+      const duration = (200 - val + 20) / 20;
+      if (clockHand) clockHand.style.animationDuration = duration + 's';
     }
-    animSlider.addEventListener('input', () => updateAnimSpeed(Number(animSlider.value)));
-    updateAnimSpeed(Number(animSlider.value));
+    animSlider.addEventListener('input', () => updateClockAnim(Number(animSlider.value)));
+    updateClockAnim(Number(animSlider.value));
 
-    renderProducts();
+    // Фото годинника як фон циферблата (опційно)
+    const clockFace = document.getElementById('clockFace');
+    if (clockFace) clockFace.style.backgroundImage = `url('${CLOCK_IMAGE}')`;
+
+    renderProductGrids();
+    switchTab('lamp');
+
+    // Режим редагування
+    function setEditMode(on) {
+      document.body.classList.toggle('edit-mode', on);
+      document.getElementById('editBar').classList.toggle('hidden', !on);
+      document.querySelectorAll('.product-card [contenteditable]').forEach(el => {
+        el.contentEditable = on;
+      });
+    }
+    function collectAndSave() {
+      const products = getProducts();
+      document.querySelectorAll('.product-card').forEach(card => {
+        const i = parseInt(card.getAttribute('data-index'), 10);
+        if (isNaN(i) || !products[i]) return;
+        const t = card.querySelector('.product-title');
+        const d = card.querySelector('.product-desc-el');
+        const pr = card.querySelector('.product-price-el');
+        if (t) products[i].title = t.textContent.trim() || products[i].title;
+        if (d) products[i].description = d.textContent.trim() || products[i].description;
+        if (pr) products[i].price = pr.textContent.trim() || products[i].price;
+      });
+      saveProducts(products);
+      setEditMode(false);
+      renderProductGrids();
+    }
+    document.getElementById('saveEditBtn').addEventListener('click', collectAndSave);
+    document.getElementById('exitEditBtn').addEventListener('click', () => { setEditMode(false); renderProductGrids(); });
+    const editToggle = document.createElement('button');
+    editToggle.textContent = 'Редагувати контент';
+    editToggle.style.cssText = 'position:fixed;bottom:1rem;right:1rem;padding:10px 16px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(0,0,0,0.85);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.25);border-radius:8px;cursor:pointer;z-index:999;';
+    editToggle.addEventListener('click', () => setEditMode(!document.body.classList.contains('edit-mode')));
+    document.body.appendChild(editToggle);
   </script>
 </body>
 </html>
