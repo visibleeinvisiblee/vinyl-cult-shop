@@ -15,40 +15,7 @@
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
     }
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('nav a');  // всі посилання в навбарі
 
-  function updateActive() {
-    // Знімаємо active з усіх
-    navLinks.forEach(link => link.classList.remove('active'));
-
-    // Поточний hash або за замовчуванням #lampa
-    let hash = window.location.hash;
-    if (!hash) hash = '#lampa';
-
-    // Знаходимо і активуємо потрібне посилання
-    const activeLink = document.querySelector(`nav a[href="${hash}"]`);
-    if (activeLink) {
-      activeLink.classList.add('active');
-    }
-  }
-
-  // Запускаємо при завантаженні
-  updateActive();
-
-  // Оновлюємо при зміні хешу (клік + кнопки назад/вперед)
-  window.addEventListener('hashchange', updateActive);
-
-  // На кліки по посиланнях (про всяк випадок)
-  navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      setTimeout(updateActive, 10);
-    });
-  });
-});
-</script>
-  
     body {
       background: #000;
       color: #fff;
@@ -492,27 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
     @media (max-width: 600px) {
       .panel-lamp .lamp-photo-wrap img { width: 100%; }
     }
-  nav a {
-  color: white;
-  text-decoration: none;
-  padding: 12px 24px;          /* було 0pxpx — помилка */
-  margin: 0 8px;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;   /* прозорий бордер, щоб не стрибав розмір */
-  border-radius: 8px;
-}
-
-nav a:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-nav a.active {
-  border: 2px solid #ff0044;       /* червона рамка */
-  background: rgba(255, 0, 68, 0.15);
-  color: #ff0044;
-  font-weight: bold;
-}
+  </style>
 </head>
 <body>
 
