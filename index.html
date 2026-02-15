@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VINYL CULT — вироби на замовлення</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      padding: 2rem;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    h1 {
+      font-size: 2.8rem;
+      letter-spacing: 0.35em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      letter-spacing: 0.4em;
+      opacity: 0.65;
+      margin-top: 0.5rem;
+    }
+
+    /* Лампа з регульованою яскравістю */
+    .lamp-section {
+      text-align: center;
+      margin: 2rem 0 3rem;
+    }
+    .lamp-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .lamp-bulb {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fff8e0, #ffcc00 40%, #e6a800 70%, #664400);
+      box-shadow:
+        0 0 60px var(--lamp-glow, rgba(255, 220, 100, 0.6)),
+        0 0 100px var(--lamp-glow-outer, rgba(255, 200, 50, 0.25)),
+        inset -10px -10px 25px rgba(0,0,0,0.2);
+      transition: box-shadow 0.2s ease, filter 0.2s ease;
+    }
+    .lamp-base {
+      width: 20px;
+      height: 30px;
+      background: linear-gradient(90deg, #333, #555);
+      margin: -5px auto 0;
+      border-radius: 0 0 4px 4px;
+    }
+    .sliders {
+      max-width: 320px;
+      margin: 0 auto 2rem;
+      padding: 1.25rem;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+    }
+    .slider-row {
+      margin-bottom: 1rem;
+    }
+    .slider-row:last-child { margin-bottom: 0; }
+    .slider-row label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 0.4rem;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255,255,255,0.15);
+      border-radius: 4px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff0044;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #ff0044;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* Товари */
+    .products {
+      display: grid;
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto 3rem;
+    }
+    .product {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 1.5rem;
+      align-items: center;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .product-image-wrap {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #111;
+    }
+    .product-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .product-info h3 {
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .product-info .product-desc {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    .product-price {
+      font-size: 1.25rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      color: #ff0044;
+      margin-bottom: 1rem;
+    }
+    .product [contenteditable="true"] {
+      outline: 1px dashed rgba(255,0,68,0.4);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    .product [contenteditable="true"]:focus {
+      outline-color: #ff0044;
+    }
+
+    .btn-order {
+      display: inline-block;
+      padding: 14px 32px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      background: #ff0044;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-order:hover {
+      background: #ff2266;
+      transform: scale(1.03);
+    }
+
+    /* Вінілова анімація (швидкість від ползунка) */
+    .vinyl-hero {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1a1a1a 0%, #333 50%, #1a1a1a 100%);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 0 25px rgba(255,0,68,0.12);
+      margin: 0 auto 1.5rem;
+      animation: vinyl-spin linear infinite;
+    }
+    .vinyl-hero::before {
+      content: '';
+      position: absolute;
+      inset: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ff0044;
+      z-index: 1;
+    }
+    .lamp-section .vinyl-hero {
+      position: relative;
+    }
+
+    @keyframes vinyl-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    /* Футер — Instagram */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .footer a:hover { color: #ff0044; }
+
+    /* Режим редагування */
+    .edit-mode-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #111;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .edit-mode-bar.hidden { display: none; }
+    .edit-mode-bar button {
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .edit-mode-bar button.primary { background: #ff0044; border-color: #ff0044; }
+    body.edit-mode { padding-top: 52px; }
+
+    @media (max-width: 600px) {
+      body { padding: 1.25rem; }
+      h1 { font-size: 1.8rem; letter-spacing: 0.2em; }
+      .subtitle { font-size: 0.75rem; letter-spacing: 0.2em; }
+      .product {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+      .product-image-wrap { max-height: 280px; }
+      .sliders { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Режим редагування: кнопка вмикає contenteditable для тексту та ціни -->
+  <div class="edit-mode-bar hidden" id="editBar">
+    <span style="font-size:0.75rem; letter-spacing:0.15em; opacity:0.9;">Режим редагування</span>
+    <button type="button" id="saveEditBtn" class="primary">Зберегти</button>
+    <button type="button" id="exitEditBtn">Вийти</button>
+  </div>
+
+  <header class="header">
+    <h1>VINYL CULT</h1>
+    <p class="subtitle">вироби на замовлення</p>
+  </header>
+
+  <section class="lamp-section">
+    <div class="lamp-wrap">
+      <div class="vinyl-hero" id="vinylHero"></div>
+      <div class="lamp-bulb" id="lampBulb"></div>
+      <div class="lamp-base"></div>
+    </div>
+    <div class="sliders">
+      <div class="slider-row">
+        <label for="brightness">Яскравість лампи</label>
+        <input type="range" id="brightness" min="0" max="100" value="70">
+      </div>
+      <div class="slider-row">
+        <label for="animSpeed">Швидкість анімації</label>
+        <input type="range" id="animSpeed" min="20" max="200" value="100">
+      </div>
+    </div>
+  </section>
+
+  <section class="products" id="productsContainer"></section>
+
+  <footer class="footer">
+    <a href="https://www.instagram.com/vinyl_cult?igsh=MXd6aXJ5dWRpMDJvNA%3D%3D&utm_source=qr" target="_blank" rel="noopener">Instagram — @vinyl_cult</a>
+  </footer>
+
+  <script>
+    // ========== ТУТ РЕДАГУЄШ ТОВАРИ: назва, опис, ціна, шлях до фото ==========
+    const PRODUCTS_CONFIG = [
+      {
+        title: 'Вінілова наліпка',
+        description: 'Ручна робота, якісний вініл. Розмір та колір на вибір.',
+        price: '150 грн',
+        image: 'images/product1.jpg'
+      },
+      {
+        title: 'Наліпка на ноутбук',
+        description: 'Оригінальний дизайн для твого девайсу.',
+        price: '200 грн',
+        image: 'images/product2.jpg'
+      },
+      {
+        title: 'Комплект наліпок',
+        description: '3–5 штук у наборі. Ідеально для скейта або авто.',
+        price: '400 грн',
+        image: 'images/product3.jpg'
+      }
+    ];
+
+    const INSTAGRAM_URL = 'https://www.instagram.com/vinyl_cult?igsh=MXd6aXJ5dWRpMDJvNA%3D%3D&utm_source=qr';
+    const ORDER_LINK = 'https://www.instagram.com/vinyl_cult'; // Заміни на посилання для замовлення (наприклад Direct)
+
+    const STORAGE_KEY = 'vinyl_cult_products';
+
+    function getProducts() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length) return parsed;
+        }
+      } catch (e) {}
+      return PRODUCTS_CONFIG.map(p => ({ ...p }));
+    }
+
+    function saveProducts(products) {
+      try {
+        const toSave = products.map(p => ({
+          title: p.title,
+          description: p.description,
+          price: p.price,
+          image: p.image
+        }));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+      } catch (e) {}
+    }
+
+    function renderProducts() {
+      const products = getProducts();
+      const container = document.getElementById('productsContainer');
+      container.innerHTML = products.map((p, i) => `
+        <article class="product" data-index="${i}">
+          <div class="product-image-wrap">
+            <img src="${p.image}" alt="${p.title}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22><rect fill=%22%23222%22 width=%22200%22 height=%22200%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2214%22>Фото ${i + 1}</text></svg>'" />
+          </div>
+          <div class="product-info">
+            <h3 class="product-title" contenteditable="false" data-field="title">${p.title}</h3>
+            <p class="product-desc product-desc-el" contenteditable="false" data-field="description">${p.description}</p>
+            <p class="product-price product-price-el" contenteditable="false" data-field="price">${p.price}</p>
+            <a href="${ORDER_LINK}" class="btn-order" target="_blank" rel="noopener">Замовити</a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function setEditMode(on) {
+      document.body.classList.toggle('edit-mode', on);
+      document.getElementById('editBar').classList.toggle('hidden', !on);
+      const products = getProducts();
+      document.querySelectorAll('.product').forEach((el, i) => {
+        const title = el.querySelector('.product-title');
+        const desc = el.querySelector('.product-desc-el');
+        const price = el.querySelector('.product-price-el');
+        [title, desc, price].forEach(node => {
+          if (!node) return;
+          node.contentEditable = on;
+          if (on) node.setAttribute('data-index', i);
+        });
+      });
+    }
+
+    function collectEditedProducts() {
+      const products = getProducts();
+      document.querySelectorAll('.product').forEach(el => {
+        const i = parseInt(el.getAttribute('data-index'), 10);
+        if (isNaN(i) || !products[i]) return;
+        const title = el.querySelector('.product-title');
+        const desc = el.querySelector('.product-desc-el');
+        const price = el.querySelector('.product-price-el');
+        if (title) products[i].title = title.textContent.trim() || products[i].title;
+        if (desc) products[i].description = desc.textContent.trim() || products[i].description;
+        if (price) products[i].price = price.textContent.trim() || products[i].price;
+      });
+      return products;
+    }
+
+    document.getElementById('saveEditBtn').addEventListener('click', () => {
+      const products = collectEditedProducts();
+      saveProducts(products);
+      setEditMode(false);
+      renderProducts();
+    });
+    document.getElementById('exitEditBtn').addEventListener('click', () => {
+      setEditMode(false);
+      renderProducts();
+    });
+
+    // Кнопка "Редагувати" — можна додати в футер або під заголовок для власника сайту
+    const editToggle = document.createElement('button');
+    editToggle.textContent = 'Редагувати контент';
+    editToggle.className = 'edit-toggle-btn';
+    editToggle.style.cssText = 'position:fixed;bottom:1rem;right:1rem;padding:10px 16px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(0,0,0,0.8);color:rgba(255,255,255,0.8);border:1px solid rgba(255,255,255,0.2);border-radius:8px;cursor:pointer;z-index:999;';
+    editToggle.addEventListener('click', () => setEditMode(!document.body.classList.contains('edit-mode')));
+    document.body.appendChild(editToggle);
+
+    // Ползунок яскравості лампи
+    const lampBulb = document.getElementById('lampBulb');
+    const brightnessSlider = document.getElementById('brightness');
+    function updateLampBrightness(val) {
+      const pct = val / 100;
+      const glow = `rgba(255, 220, 100, ${0.2 + 0.6 * pct})`;
+      const outer = `rgba(255, 200, 50, ${0.1 + 0.25 * pct})`;
+      lampBulb.style.setProperty('--lamp-glow', glow);
+      lampBulb.style.setProperty('--lamp-glow-outer', outer);
+      lampBulb.style.filter = `brightness(${0.3 + 0.8 * pct})`;
+    }
+    brightnessSlider.addEventListener('input', () => updateLampBrightness(Number(brightnessSlider.value)));
+    updateLampBrightness(Number(brightnessSlider.value));
+
+    // Ползунок швидкості анімації (вініл)
+    const vinylHero = document.getElementById('vinylHero');
+    const animSlider = document.getElementById('animSpeed');
+    function updateAnimSpeed(val) {
+      const duration = (200 - val + 20) / 20; // 20 = дуже швидко, 200 = повільно (секунди * 10)
+      vinylHero.style.animationDuration = duration + 's';
+    }
+    animSlider.addEventListener('input', () => updateAnimSpeed(Number(animSlider.value)));
+    updateAnimSpeed(Number(animSlider.value));
+
+    renderProducts();
+  </script>
+</body>
+</html>
