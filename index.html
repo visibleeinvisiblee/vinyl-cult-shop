@@ -2,17 +2,30 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#000000"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="format-detection" content="telephone=no"/>
   <title>VINYL CULT — вироби на замовлення</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
     body {
       background: #000;
       color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       min-height: 100vh;
+      min-height: -webkit-fill-available;
       overflow-x: hidden;
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
     .page-wrap {
@@ -45,9 +58,15 @@
       gap: 0.5rem;
       margin-bottom: 1.5rem;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 20;
     }
     .line-nav button {
-      padding: 10px 20px;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 12px 20px;
+      min-height: 44px;
+      min-width: 44px;
       font-size: 0.8rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -56,6 +75,8 @@
       border: 1px solid rgba(255,255,255,0.25);
       border-radius: 50px;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
     }
     .line-nav button:hover {
@@ -68,16 +89,22 @@
       background: rgba(255,0,68,0.15);
     }
 
-    /* Головне меню — вкладки */
+    /* Головне меню — вкладки (z-index щоб завжди було поверх контенту) */
     .main-nav {
       display: flex;
       justify-content: center;
       gap: 0.25rem;
       margin-bottom: 2rem;
       flex-wrap: wrap;
+      position: relative;
+      z-index: 20;
     }
     .main-nav button {
-      padding: 14px 24px;
+      -webkit-appearance: none;
+      appearance: none;
+      padding: 14px 20px;
+      min-height: 48px;
+      min-width: 44px;
       font-size: 0.85rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
@@ -86,6 +113,8 @@
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 8px;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       transition: all 0.35s ease;
     }
     .main-nav button:hover {
@@ -105,22 +134,15 @@
       min-height: 420px;
     }
     .panel {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      display: none;
       opacity: 0;
-      visibility: hidden;
       transform: translateY(12px);
-      transition: opacity 0.45s ease, transform 0.45s ease, visibility 0.45s;
-      pointer-events: none;
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
     .panel.active {
-      position: relative;
+      display: block;
       opacity: 1;
-      visibility: visible;
       transform: translateY(0);
-      pointer-events: auto;
     }
 
     /* Лампа — фото + яскравість */
@@ -247,6 +269,14 @@
     }
     input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); }
     input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #ff0044;
+      cursor: pointer;
+      border: none;
+    }
+    input[type="range"]::-ms-thumb {
       width: 20px;
       height: 20px;
       border-radius: 50%;
@@ -268,9 +298,14 @@
       overflow: hidden;
       transition: border-color 0.3s ease, transform 0.3s ease;
     }
-    .product-card:hover {
-      border-color: rgba(255,0,68,0.3);
-      transform: translateY(-2px);
+    @media (hover: hover) {
+      .product-card:hover {
+        border-color: rgba(255,0,68,0.3);
+        transform: translateY(-2px);
+      }
+    }
+    .product-card:active {
+      border-color: rgba(255,0,68,0.25);
     }
     .product-card .product-image-wrap {
       aspect-ratio: 1;
@@ -319,12 +354,15 @@
       border-radius: 50px;
       cursor: pointer;
       text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       transition: background 0.25s ease, transform 0.25s ease;
     }
-    .btn-order:hover {
-      background: #ff2266;
-      transform: scale(1.03);
+    .btn-order:hover { background: #ff2266; }
+    @media (hover: hover) {
+      .btn-order:hover { transform: scale(1.03); }
     }
+    .btn-order:active { transform: scale(0.98); }
     .product-card [contenteditable="true"] {
       outline: 1px dashed rgba(255,0,68,0.4);
       outline-offset: 2px;
@@ -351,6 +389,8 @@
       font-size: 0.9rem;
       letter-spacing: 0.2em;
       transition: color 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     .footer a:hover { color: #ff0044; }
 
@@ -384,13 +424,36 @@
     .edit-mode-bar button.primary { background: #ff0044; border-color: #ff0044; }
     body.edit-mode { padding-top: 52px; }
 
-    @media (max-width: 600px) {
-      .page-wrap { padding: 1rem; }
-      h1 { font-size: 1.75rem; letter-spacing: 0.2em; }
-      .subtitle { font-size: 0.75rem; letter-spacing: 0.2em; }
-      .main-nav button { padding: 12px 16px; font-size: 0.75rem; letter-spacing: 0.12em; }
+    /* Адаптив: телефон, планшет, десктоп */
+    @media (max-width: 480px) {
+      .page-wrap { padding: 1rem 1rem 2rem; padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      h1 { font-size: clamp(1.4rem, 6vw, 1.75rem); letter-spacing: 0.15em; }
+      .subtitle { font-size: 0.7rem; letter-spacing: 0.2em; }
+      .line-nav { gap: 0.35rem; margin-bottom: 1rem; }
+      .line-nav button { padding: 10px 14px; font-size: 0.7rem; }
+      .main-nav { gap: 0.2rem; margin-bottom: 1.5rem; }
+      .main-nav button { padding: 12px 14px; font-size: 0.7rem; letter-spacing: 0.1em; }
+      .panels { min-height: 360px; }
+      .panel-lamp .lamp-photo-wrap img { width: 100%; max-width: 280px; }
+      .lamp-placeholder { width: 100%; max-width: 280px; height: 200px; }
+      .slider-box { padding: 1rem; max-width: 100%; }
       .clock-face { width: 160px; height: 160px; }
       .clock-face .hand { height: 35%; }
+      .products-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .product-card .product-info { padding: 1rem; }
+      .footer { padding: 1.5rem 0 1rem; padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+    }
+    @media (min-width: 481px) and (max-width: 768px) {
+      .page-wrap { padding: 1.25rem 1.5rem 2.5rem; }
+      h1 { font-size: 2rem; letter-spacing: 0.25em; }
+      .main-nav button { padding: 12px 18px; font-size: 0.8rem; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+      .clock-face { width: 180px; height: 180px; }
+    }
+    @media (min-width: 769px) {
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    }
+    @media (max-width: 600px) {
       .panel-lamp .lamp-photo-wrap img { width: 100%; }
     }
   </style>
@@ -415,16 +478,16 @@
       <button type="button" class="line-btn" data-line="CyberCult">CyberCult</button>
     </nav>
 
-    <nav class="main-nav" aria-label="Категорії">
-      <button type="button" class="tab-btn active" data-tab="lamp">Лампи</button>
-      <button type="button" class="tab-btn" data-tab="clock">Годинники</button>
-      <button type="button" class="tab-btn" data-tab="shelf">Стелаж</button>
-      <button type="button" class="tab-btn" data-tab="stickers">Наліпки</button>
+    <nav class="main-nav" aria-label="Категорії" role="tablist">
+      <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-lamp" id="tab-lamp" data-tab="lamp">Лампи</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-clock" id="tab-clock" data-tab="clock">Годинники</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-shelf" id="tab-shelf" data-tab="shelf">Стелаж</button>
+      <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-stickers" id="tab-stickers" data-tab="stickers">Наліпки</button>
     </nav>
 
     <div class="panels">
       <!-- Лампа: фото + яскравість -->
-      <section class="panel panel-lamp active" id="panel-lamp">
+      <section class="panel panel-lamp active" id="panel-lamp" role="tabpanel" aria-labelledby="tab-lamp">
         <div class="lamp-photo-wrap">
           <img id="lampPhoto" src="images/lamp.jpg" alt="Лампа" onerror="this.style.display='none'; this.nextElementSibling.classList.add('show');">
           <div class="lamp-placeholder" id="lampPlaceholder">Додай фото лампи:<br>images/lamp.jpg</div>
@@ -438,7 +501,7 @@
       </section>
 
       <!-- Годинник: анімація стрілки -->
-      <section class="panel panel-clock" id="panel-clock">
+      <section class="panel panel-clock" id="panel-clock" role="tabpanel" aria-labelledby="tab-clock" hidden>
         <div class="clock-wrap">
           <div class="clock-face" id="clockFace">
             <div class="hand" id="clockHand"></div>
@@ -453,12 +516,12 @@
       </section>
 
       <!-- Стелаж -->
-      <section class="panel panel-products" id="panel-shelf">
+      <section class="panel panel-products" id="panel-shelf" role="tabpanel" aria-labelledby="tab-shelf" hidden>
         <div class="products-grid" id="productsShelf"></div>
       </section>
 
       <!-- Наліпки -->
-      <section class="panel panel-products" id="panel-stickers">
+      <section class="panel panel-products" id="panel-stickers" role="tabpanel" aria-labelledby="tab-stickers" hidden>
         <div class="products-grid" id="productsStickers"></div>
       </section>
     </div>
@@ -469,6 +532,9 @@
   </footer>
 
   <script>
+    (function() {
+    'use strict';
+
     // ========== КОНФІГ: категорія (shelf|stickers), лінійка (VinylCult|CyberCult), фото лампи/годинника ==========
     const PRODUCTS_CONFIG = [
       { title: 'Стелаж малий', description: 'Для вінілу та декору.', price: '850 грн', image: 'images/shelf1.jpg', category: 'shelf', line: 'VinylCult' },
@@ -535,23 +601,31 @@
     function renderProductGrids() {
       const { list: shelf, all } = getFilteredProducts('shelf');
       const { list: stickers } = getFilteredProducts('stickers');
-      const shelfEl = document.getElementById('productsShelf');
-      const stickersEl = document.getElementById('productsStickers');
-      shelfEl.innerHTML = shelf.length
-        ? shelf.map(p => renderProductCard(p, all.indexOf(p))).join('')
+      var shelfEl = document.getElementById('productsShelf');
+      var stickersEl = document.getElementById('productsStickers');
+      if (shelfEl) shelfEl.innerHTML = shelf.length
+        ? shelf.map(function(p) { return renderProductCard(p, all.indexOf(p)); }).join('')
         : '<p class="empty-state">Тут поки немає товарів цієї лінійки. Додай у PRODUCTS_CONFIG (category: shelf).</p>';
-      stickersEl.innerHTML = stickers.length
-        ? stickers.map(p => renderProductCard(p, all.indexOf(p))).join('')
+      if (stickersEl) stickersEl.innerHTML = stickers.length
+        ? stickers.map(function(p) { return renderProductCard(p, all.indexOf(p)); }).join('')
         : '<p class="empty-state">Тут поки немає товарів цієї лінійки. Додай у PRODUCTS_CONFIG (category: stickers).</p>';
     }
 
     function switchTab(tabId) {
       currentTab = tabId;
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+      document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        var isActive = btn.getAttribute('data-tab') === tabId;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.classList.toggle('active', panel.id === 'panel-' + tabId);
+      document.querySelectorAll('.panel').forEach(function(panel) {
+        var isActive = panel.id === 'panel-' + tabId;
+        panel.classList.toggle('active', isActive);
+        if (isActive) {
+          panel.removeAttribute('hidden');
+        } else {
+          panel.setAttribute('hidden', '');
+        }
       });
     }
 
@@ -563,12 +637,25 @@
       renderProductGrids();
     }
 
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => switchTab(btn.getAttribute('data-tab')));
-    });
-    document.querySelectorAll('.line-btn').forEach(btn => {
-      btn.addEventListener('click', () => switchLine(btn.getAttribute('data-line')));
-    });
+    // Перемикання вкладок і лінійок — делегування на document (Brave, Safari, Chrome, Firefox, Android, iOS)
+    function handleNavClick(e) {
+      var target = e.target;
+      if (!target || typeof target.closest !== 'function') return;
+      var tabBtn = target.closest('.tab-btn');
+      if (tabBtn) {
+        e.preventDefault();
+        var tabId = tabBtn.getAttribute('data-tab');
+        if (tabId) switchTab(tabId);
+        return;
+      }
+      var lineBtn = target.closest('.line-btn');
+      if (lineBtn) {
+        e.preventDefault();
+        var lineId = lineBtn.getAttribute('data-line');
+        if (lineId) switchLine(lineId);
+      }
+    }
+    document.addEventListener('click', handleNavClick, true);
 
     // Яскравість — на фото лампи
     const lampPhoto = document.getElementById('lampPhoto');
@@ -578,22 +665,26 @@
       const brightness = 0.25 + 0.95 * pct;
       if (lampPhoto) lampPhoto.style.filter = `brightness(${brightness})`;
     }
-    brightnessSlider.addEventListener('input', () => updateLampBrightness(Number(brightnessSlider.value)));
-    updateLampBrightness(Number(brightnessSlider.value));
+    if (brightnessSlider) {
+      brightnessSlider.addEventListener('input', function() { updateLampBrightness(Number(brightnessSlider.value)); });
+      updateLampBrightness(Number(brightnessSlider.value));
+    }
 
     // Швидкість анімації — на годиннику (стрілка)
-    const clockHand = document.getElementById('clockHand');
-    const animSlider = document.getElementById('animSpeed');
+    var clockHand = document.getElementById('clockHand');
+    var animSlider = document.getElementById('animSpeed');
     function updateClockAnim(val) {
-      const duration = (200 - val + 20) / 20;
+      var duration = (200 - val + 20) / 20;
       if (clockHand) clockHand.style.animationDuration = duration + 's';
     }
-    animSlider.addEventListener('input', () => updateClockAnim(Number(animSlider.value)));
-    updateClockAnim(Number(animSlider.value));
+    if (animSlider) {
+      animSlider.addEventListener('input', function() { updateClockAnim(Number(animSlider.value)); });
+      updateClockAnim(Number(animSlider.value));
+    }
 
     // Фото годинника як фон циферблата (опційно)
-    const clockFace = document.getElementById('clockFace');
-    if (clockFace) clockFace.style.backgroundImage = `url('${CLOCK_IMAGE}')`;
+    var clockFace = document.getElementById('clockFace');
+    if (clockFace && CLOCK_IMAGE) clockFace.style.backgroundImage = "url('" + CLOCK_IMAGE + "')";
 
     renderProductGrids();
     switchTab('lamp');
@@ -627,8 +718,10 @@
     const editToggle = document.createElement('button');
     editToggle.textContent = 'Редагувати контент';
     editToggle.style.cssText = 'position:fixed;bottom:1rem;right:1rem;padding:10px 16px;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(0,0,0,0.85);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.25);border-radius:8px;cursor:pointer;z-index:999;';
-    editToggle.addEventListener('click', () => setEditMode(!document.body.classList.contains('edit-mode')));
+    editToggle.addEventListener('click', function() { setEditMode(!document.body.classList.contains('edit-mode')); });
     document.body.appendChild(editToggle);
+
+    })();
   </script>
 </body>
 </html>
