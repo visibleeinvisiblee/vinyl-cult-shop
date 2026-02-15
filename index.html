@@ -99,7 +99,7 @@
       position: relative;
       z-index: 20;
     }
-    .main-nav button {
+    .main-nav .tab-btn {
       -webkit-appearance: none;
       appearance: none;
       padding: 14px 20px;
@@ -116,13 +116,16 @@
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       transition: all 0.35s ease;
+      text-decoration: none;
+      display: inline-block;
+      box-sizing: border-box;
     }
-    .main-nav button:hover {
+    .main-nav .tab-btn:hover {
       background: rgba(255,255,255,0.1);
       border-color: rgba(255,255,255,0.25);
       color: #fff;
     }
-    .main-nav button.active {
+    .main-nav .tab-btn.active {
       background: rgba(255,0,68,0.2);
       border-color: #ff0044;
       color: #fff;
@@ -432,7 +435,7 @@
       .line-nav { gap: 0.35rem; margin-bottom: 1rem; }
       .line-nav button { padding: 10px 14px; font-size: 0.7rem; }
       .main-nav { gap: 0.2rem; margin-bottom: 1.5rem; }
-      .main-nav button { padding: 12px 14px; font-size: 0.7rem; letter-spacing: 0.1em; }
+      .main-nav .tab-btn { padding: 12px 14px; font-size: 0.7rem; letter-spacing: 0.1em; }
       .panels { min-height: 360px; }
       .panel-lamp .lamp-photo-wrap img { width: 100%; max-width: 280px; }
       .lamp-placeholder { width: 100%; max-width: 280px; height: 200px; }
@@ -446,7 +449,7 @@
     @media (min-width: 481px) and (max-width: 768px) {
       .page-wrap { padding: 1.25rem 1.5rem 2.5rem; }
       h1 { font-size: 2rem; letter-spacing: 0.25em; }
-      .main-nav button { padding: 12px 18px; font-size: 0.8rem; }
+      .main-nav .tab-btn { padding: 12px 18px; font-size: 0.8rem; }
       .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
       .clock-face { width: 180px; height: 180px; }
     }
@@ -479,10 +482,10 @@
     </nav>
 
     <nav class="main-nav" aria-label="Категорії" role="tablist">
-      <button type="button" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-lamp" id="tab-lamp" data-tab="lamp">Лампи</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-clock" id="tab-clock" data-tab="clock">Годинники</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-shelf" id="tab-shelf" data-tab="shelf">Стелаж</button>
-      <button type="button" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-stickers" id="tab-stickers" data-tab="stickers">Наліпки</button>
+      <a href="#lamp" class="tab-btn active" role="tab" aria-selected="true" aria-controls="panel-lamp" id="tab-lamp" data-tab="lamp">Лампи</a>
+      <a href="#clock" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-clock" id="tab-clock" data-tab="clock">Годинники</a>
+      <a href="#shelf" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-shelf" id="tab-shelf" data-tab="shelf">Стелаж</a>
+      <a href="#stickers" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-stickers" id="tab-stickers" data-tab="stickers">Наліпки</a>
     </nav>
 
     <div class="panels">
@@ -642,15 +645,34 @@
       renderProductGrids();
     }
 
-    // Перемикання вкладок і лінійок — делегування на document (Brave, Safari, Chrome, Firefox, Android, iOS)
-    function handleNavClick(e) {
+    // Перемикання вкладок по хешу (#lamp, #clock, #shelf, #stickers) — працює навіть якщо клік не спрацьовує (Brave тощо)
+    var VALID_TABS = ['lamp', 'clock', 'shelf', 'stickers'];
+    function getTabFromHash() {
+      var h = window.location.hash ? window.location.hash.slice(1) : '';
+      return VALID_TABS.indexOf(h) >= 0 ? h : 'lamp';
+    }
+    function applyTabFromHash() {
+      var tabId = getTabFromHash();
+      switchTab(tabId);
+    }
+    window.addEventListener('hashchange', applyTabFromHash);
+
+    // Клік по вкладці: запобігаємо стрибку, ставимо хеш і перемикаємо (хеш викличе hashchange → applyTabFromHash)
+    document.addEventListener('click', function(e) {
       var target = e.target;
       if (!target || typeof target.closest !== 'function') return;
       var tabBtn = target.closest('.tab-btn');
       if (tabBtn) {
         e.preventDefault();
         var tabId = tabBtn.getAttribute('data-tab');
-        if (tabId) switchTab(tabId);
+        if (tabId) {
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', '#' + tabId);
+          } else {
+            window.location.hash = tabId;
+          }
+          switchTab(tabId);
+        }
         return;
       }
       var lineBtn = target.closest('.line-btn');
@@ -659,8 +681,7 @@
         var lineId = lineBtn.getAttribute('data-line');
         if (lineId) switchLine(lineId);
       }
-    }
-    document.addEventListener('click', handleNavClick, true);
+    }, true);
 
     // Яскравість — на фото лампи
     const lampPhoto = document.getElementById('lampPhoto');
@@ -692,7 +713,8 @@
     if (clockFace && CLOCK_IMAGE) clockFace.style.backgroundImage = "url('" + CLOCK_IMAGE + "')";
 
     renderProductGrids();
-    switchTab('lamp');
+    if (!window.location.hash) window.location.hash = 'lamp';
+    applyTabFromHash();
 
     // Режим редагування
     function setEditMode(on) {
